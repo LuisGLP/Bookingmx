@@ -1,10 +1,13 @@
 package com.bookingmx.reservations.repo;
 
 import com.bookingmx.reservations.model.Reservation;
+import org.springframework.stereotype.Repository;
+
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
+@Repository
 public class ReservationRepository {
     private final Map<Long, Reservation> store = new ConcurrentHashMap<>();
     private final AtomicLong seq = new AtomicLong(1L);
