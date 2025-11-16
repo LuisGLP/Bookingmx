@@ -22,14 +22,14 @@ public class ReservationController {
         this.service = service;
     }
 
-    @GetMapping
+    @GetMapping(produces = "application/json")
     public List<ReservationResponse> list() {
         return service.list().stream()
                 .map(this::toResponse)
                 .toList();
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = "application/json", produces = "application/json")
     public ReservationResponse create(@Valid @RequestBody ReservationRequest req) {
         return toResponse(service.create(req));
     }
