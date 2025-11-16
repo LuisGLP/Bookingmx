@@ -1,0 +1,12 @@
+com\bookingmx\reservations\dto\ReservationRequest.class
+com\bookingmx\reservations\BookingMxApplication.class
+com\bookingmx\reservations\service\ReservationService.class
+com\bookingmx\reservations\controller\GlobalExceptionHandler.class
+com\bookingmx\reservations\exception\ApiExceptionHandler.class
+com\bookingmx\reservations\exception\BadRequestException.class
+com\bookingmx\reservations\dto\ReservationResponse.class
+com\bookingmx\reservations\model\Reservation.class
+com\bookingmx\reservations\exception\NotFoundException.class
+com\bookingmx\reservations\repo\ReservationRepository.class
+com\bookingmx\reservations\model\ReservationStatus.class
+com\bookingmx\reservations\controller\ReservationController.class
