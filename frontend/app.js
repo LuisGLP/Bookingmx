@@ -1,5 +1,14 @@
-import { sampleData, validateGraphData, buildGraph, getNearbyCities } from "./js/graph.js";
-import { listReservations, createReservation, cancelReservation } from "./js/api.js";
+import {
+  sampleData,
+  validateGraphData,
+  buildGraph,
+  getNearbyCities,
+} from "./js/graph.js";
+import {
+  listReservations,
+  createReservation,
+  cancelReservation,
+} from "./js/api.js";
 
 // Graph UI
 const form = document.getElementById("graph-form");
@@ -8,7 +17,9 @@ const maxDistanceEl = document.getElementById("maxDistance");
 const nearbyList = document.getElementById("nearby-list");
 
 const validation = validateGraphData(sampleData);
-const graph = validation.ok ? buildGraph(sampleData.cities, sampleData.edges) : null;
+const graph = validation.ok
+  ? buildGraph(sampleData.cities, sampleData.edges)
+  : null;
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -40,10 +51,15 @@ async function refreshReservations() {
     listEl.innerHTML = "";
     for (const r of items) {
       const li = document.createElement("li");
+      // ⬇️ si el estatus es "cancelled", no se muestra el botón
+      const cancelBtn =
+        r.status.toLowerCase() === "canceled"
+          ? ""
+          : `<button data-id="${r.id}" class="cancel">Cancel</button>`;
       li.innerHTML = `
         <strong>#${r.id}</strong> ${r.guestName} @ ${r.hotelName}
         (${r.checkIn} → ${r.checkOut}) [${r.status}]
-        <button data-id=\"${r.id}\" class=\"cancel\">Cancel</button>
+        ${cancelBtn}
       `;
       listEl.appendChild(li);
     }
@@ -58,7 +74,7 @@ resForm.addEventListener("submit", async (e) => {
     guestName: document.getElementById("guestName").value.trim(),
     hotelName: document.getElementById("hotelName").value.trim(),
     checkIn: document.getElementById("checkIn").value,
-    checkOut: document.getElementById("checkOut").value
+    checkOut: document.getElementById("checkOut").value,
   };
   try {
     await createReservation(payload);
