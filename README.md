@@ -28,6 +28,16 @@ Minimal vanilla JS + Spring Boot project to practice unit tests.
 - HTML5/CSS3
 - Jest (testing)
 
+**Frontend available at:** `http://localhost:5173`
+
+#### Run Frontend Tests
+
+```bash
+cd frontend
+npm test
+npm run test:coverage  # With coverage report
+```
+
 ## Setup and Execution
 
 ### Backend
@@ -69,6 +79,51 @@ npm install
 npm run serve
 ```
 
+### Project Structure
+
+```bash
+BookingMx/
+├── backend/
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── java/com/bookingmx/reservations/
+│   │   │   │   ├── controller/
+│   │   │   │   │   ├── ReservationController.java
+│   │   │   │   │   └── GlobalExceptionHandler.java
+│   │   │   │   ├── service/
+│   │   │   │   │   └── ReservationService.java      ← FIXED (@Service)
+│   │   │   │   ├── model/
+│   │   │   │   ├── dto/
+│   │   │   │   ├── repo/
+│   │   │   │   └── exception/
+│   │   │   └── resources/
+│   │   │       └── application.properties
+│   │   └── test/
+│   │       └── java/
+│   │           └── ReservationServiceTest.java
+│   ├── pom.xml
+│   ├── Dockerfile
+│   └── TESTING_NOTES.md
+│
+├── frontend/
+│   ├── js/
+│   │   ├── graph.js
+│   │   ├── api.js
+│   │   └── graph.test.js
+│   ├── app.js                                       ← UPDATED
+│   ├── index.html
+│   ├── styles.css
+│   ├── package.json
+│   ├── jest.config.js
+│   ├── nginx.conf
+│   ├── Dockerfile
+│   ├── .gitignore
+│   └── JEST_TEST_SETUP.md
+│
+├── docker-compose.yml
+└── README.md
+```
+
 ---
 
 ### Issues Fixed
@@ -80,7 +135,7 @@ Backend
 **Solution:**
 
 ```bash
-// filepath: [ReservationService.java](http://_vscodecontentref_/0)
+// filepath: [ReservationService.java]
 package com.bookingmx.reservations.service;
 
 import org.springframework.stereotype.Service;
