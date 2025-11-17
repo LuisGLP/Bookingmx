@@ -79,6 +79,16 @@ npm install
 npm run serve
 ```
 
+**Frontend available at:** `http://localhost:5173`
+
+#### Run Frontend Tests
+
+```bash
+cd frontend
+npm test
+npm run test:coverage  # With coverage report
+```
+
 ### Project Structure
 
 ```bash
@@ -102,7 +112,6 @@ BookingMx/
 │   │       └── java/
 │   │           └── ReservationServiceTest.java
 │   ├── pom.xml
-│   ├── Dockerfile
 │   └── TESTING_NOTES.md
 │
 ├── frontend/
@@ -115,12 +124,9 @@ BookingMx/
 │   ├── styles.css
 │   ├── package.json
 │   ├── jest.config.js
-│   ├── nginx.conf
-│   ├── Dockerfile
 │   ├── .gitignore
 │   └── JEST_TEST_SETUP.md
 │
-├── docker-compose.yml
 └── README.md
 ```
 
