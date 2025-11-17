@@ -140,7 +140,7 @@ Backend
 
 **Solution:**
 
-```bash
+```java
 // filepath: [ReservationService.java]
 package com.bookingmx.reservations.service;
 
@@ -158,5 +158,40 @@ public class ReservationService {
     }
 
     // ...existing code...
+}
+```
+
+Frontend
+**Issue 2: Cancel Button Visible After Cancellation**
+**Problem:** The "Cancel Reservation" button remained visible after cancelling a reservation.
+
+**Solution:**
+
+```javascript
+// filepath: frontend/app.js
+async function cancelReservation(id) {
+  if (!confirm("Are you sure you want to cancel this reservation?")) return;
+
+  try {
+    const data = await updateReservationStatus(id, "CANCELLED");
+
+    // Update UI
+    const card = document.querySelector(`[data-reservation-id="${id}"]`);
+    if (card) {
+      const statusBadge = card.querySelector(".status-badge");
+      statusBadge.textContent = "CANCELLED";
+      statusBadge.className = "status-badge status-cancelled";
+
+      // NEW: Hide cancel button
+      const cancelBtn = card.querySelector(".btn-cancel");
+      if (cancelBtn) {
+        cancelBtn.style.display = "none"; // ← ADDED
+      }
+    }
+
+    alert("Reservation cancelled successfully");
+  } catch (error) {
+    alert("Error cancelling: " + error.message);
+  }
 }
 ```
