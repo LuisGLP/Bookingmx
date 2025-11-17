@@ -79,6 +79,16 @@ npm install
 npm run serve
 ```
 
+**Frontend available at:** `http://localhost:5173`
+
+#### Run Frontend Tests
+
+```bash
+cd frontend
+npm test
+npm run test:coverage  # With coverage report
+```
+
 ### Project Structure
 
 ```bash
