@@ -14,7 +14,6 @@ import java.util.List;
 
 /**
  * ReservationService
- *
  * This service layer contains the business logic for handling reservations.
  * It validates data, enforces rules, interacts with the repository, and
  * ensures consistency before saving or updating reservation entities.
@@ -24,7 +23,6 @@ public class ReservationService {
 
     /**
      * repo
-     *
      * Repository used for performing CRUD operations on reservations.
      */
     private final ReservationRepository repo;
@@ -49,7 +47,6 @@ public class ReservationService {
 
     /**
      * Creates a new reservation.
-     *
      * Steps performed:
      * - Validates check-in and check-out dates.
      * - Creates a new Reservation entity using the request data.
@@ -72,7 +69,6 @@ public class ReservationService {
 
     /**
      * Updates an existing reservation.
-     *
      * Steps performed:
      * - Finds the reservation by ID or throws NotFoundException.
      * - Ensures the reservation is active (cannot update canceled reservations).
@@ -114,16 +110,10 @@ public class ReservationService {
         existing.setStatus(ReservationStatus.CANCELED);
         return repo.save(existing);
     }
-
-/**
- * Validates check-in and check-out dates.
- *
- * Rules:
- * - Dates cannot be null.
- * - Check-out must be strictly after check-in.
- * - Both dates must be in the future.
- *
- * @param in  The check-in date.
- * @param out The check-out date.
- *
- * @throws BadRequestException if any rule is violated.
+    private void validateDates(LocalDate in, LocalDate out) {
+        if (in == null || out == null) throw new BadRequestException("Dates cannot be null");
+        if (!out.isAfter(in)) throw new BadRequestException("Check-out must be after check-in");
+        if (in.isBefore(LocalDate.now())) throw new BadRequestException("Check-in must be in the future");
+        if (out.isBefore(LocalDate.now())) throw new BadRequestException("Check-out must be in the future");
+    }
+}
