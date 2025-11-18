@@ -1,4 +1,0 @@
-com\bookingmx\reservations\exception\ApiExceptionHandlerTest.class
-com\bookingmx\reservations\repo\ReservationRepositoryTest.class
-com\bookingmx\reservations\service\ReservationServiceTest.class
-com\bookingmx\reservations\controller\ReservationControllerTest.class
