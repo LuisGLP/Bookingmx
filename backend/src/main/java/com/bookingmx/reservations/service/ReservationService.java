@@ -60,6 +60,7 @@ public class ReservationService {
      */
     public Reservation create(ReservationRequest req) {
         validateDates(req.getCheckIn(), req.getCheckOut());
+        Reservation r = new Reservation(null, req.getGuestName(), req.getHotelName(), req.getCheckIn(), req.getCheckOut());
         Reservation r = new Reservation(
                 null,
                 req.getGuestName(),
@@ -85,6 +86,8 @@ public class ReservationService {
      * @return The updated Reservation entity.
      */
     public Reservation update(Long id, ReservationRequest req) {
+        Reservation existing = repo.findById(id).orElseThrow(() -> new NotFoundException("Reservation not found"));
+        if (!existing.isActive()) throw new BadRequestException("Cannot update a canceled reservation");
         Reservation existing = repo.findById(id)
                 .orElseThrow(() -> new NotFoundException("Reservation not found"));
 
@@ -108,6 +111,7 @@ public class ReservationService {
      * @return The canceled Reservation object after saving the change.
      */
     public Reservation cancel(Long id) {
+        Reservation existing = repo.findById(id).orElseThrow(() -> new NotFoundException("Reservation not found"));
         Reservation existing = repo.findById(id)
                 .orElseThrow(() -> new NotFoundException("Reservation not found"));
 
@@ -115,15 +119,10 @@ public class ReservationService {
         return repo.save(existing);
     }
 
-/**
- * Validates check-in and check-out dates.
- *
- * Rules:
- * - Dates cannot be null.
- * - Check-out must be strictly after check-in.
- * - Both dates must be in the future.
- *
- * @param in  The check-in date.
- * @param out The check-out date.
- *
- * @throws BadRequestException if any rule is violated.
+    private void validateDates(LocalDate in, LocalDate out) {
+        if (in == null || out == null) throw new BadRequestException("Dates cannot be null");
+        if (!out.isAfter(in)) throw new BadRequestException("Check-out must be after check-in");
+        if (in.isBefore(LocalDate.now())) throw new BadRequestException("Check-in must be in the future");
+        if (out.isBefore(LocalDate.now())) throw new BadRequestException("Check-out must be in the future");
+    }
+}

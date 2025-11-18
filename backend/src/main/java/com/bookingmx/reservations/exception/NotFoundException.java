@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * The @ResponseStatus annotation ensures that Spring returns an HTTP 404 NOT FOUND
  * response whenever this exception is triggered.
  */
+
 @ResponseStatus(HttpStatus.NOT_FOUND)
 public class NotFoundException extends RuntimeException {
     /**
@@ -20,4 +21,3 @@ public class NotFoundException extends RuntimeException {
      */
     public NotFoundException(String m) { super(m); }
 }
-
