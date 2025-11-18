@@ -16,6 +16,9 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
  * Using @RestControllerAdvice, any exception thrown in the application can be intercepted here,
  * allowing consistent and controlled error responses for the client.
  */
+
+
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -29,6 +32,7 @@ public class GlobalExceptionHandler {
      *
      * This method is triggered when a requested resource does not exist.
      */
+
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<String> handleNotFound(NotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
@@ -46,11 +50,8 @@ public class GlobalExceptionHandler {
      *         - HTTP status 400 BAD REQUEST
      *         - Response body containing the exception message
      */
-    @ExceptionHandler({
-            BadRequestException.class,
-            MethodArgumentNotValidException.class,
-            HttpMessageNotReadableException.class
-    })
+    
+    @ExceptionHandler({ BadRequestException.class, MethodArgumentNotValidException.class, HttpMessageNotReadableException.class })
     public ResponseEntity<String> handleBadRequest(Exception ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
@@ -64,8 +65,10 @@ public class GlobalExceptionHandler {
      *         - HTTP status 500 INTERNAL SERVER ERROR
      *         - Generic response body: "Internal error"
      */
+    
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleOther(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal error");
     }
 }
+
