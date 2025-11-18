@@ -20,19 +20,43 @@ import java.util.Optional;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * ReservationServiceTest
+ *
+ * Unit test suite for the ReservationService class.
+ * This class validates:
+ *
+ *  - Reservation creation behavior
+ *  - Date validation logic
+ *  - Cancellation workflow
+ *  - Correct interaction with ReservationRepository using mocks
+ *  - Persistence of expected values
+ *  - Integrity of the Reservation model
+ *
+ * Mockito is used to isolate the service layer from the repository.
+ */
 public class ReservationServiceTest {
 
+    /** Mocked repository to avoid touching real persistence. */
     @Mock
     private ReservationRepository repository;
 
+    /** Service instance with mocks injected automatically. */
     @InjectMocks
     private ReservationService service;
 
+    /**
+     * Initializes Mockito mocks before each test case.
+     */
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
     }
 
+    /**
+     * Helper method to build a valid ReservationRequest.
+     * Used in multiple test cases to reduce duplication.
+     */
     private ReservationRequest buildRequest() {
         ReservationRequest req = new ReservationRequest();
         req.setGuestName("Luis");
@@ -44,6 +68,11 @@ public class ReservationServiceTest {
         return req;
     }
 
+    /**
+     * Tests successful reservation creation.
+     * Ensures the repository save() method is invoked
+     * and the returned object contains expected data.
+     */
     @Test
     void testCreateReservation_Success() {
 
@@ -66,6 +95,10 @@ public class ReservationServiceTest {
         verify(repository, times(1)).save(any());
     }
 
+    /**
+     * Tests successful cancellation of a reservation.
+     * Ensures status is updated to CANCELED and persisted.
+     */
     @Test
     void testCancelReservation_Success() {
 
@@ -86,6 +119,10 @@ public class ReservationServiceTest {
         verify(repository).save(res);
     }
 
+    /**
+     * Tests cancellation failure when reservation ID does not exist.
+     * Ensures NotFoundException is thrown and save() is never called.
+     */
     @Test
     void cancelReservation_notFound() {
         when(repository.findById(1L)).thenReturn(Optional.empty());
@@ -96,6 +133,9 @@ public class ReservationServiceTest {
         verify(repository, never()).save(any());
     }
 
+    /**
+     * Tests creation failure when check-out date is before check-in date.
+     */
     @Test
     void testCreateReservation_InvalidDates() {
 
@@ -103,7 +143,7 @@ public class ReservationServiceTest {
         req.setGuestName("Luis");
         req.setHotelName("Hotel Azul");
         req.setCheckIn(LocalDate.now().plusDays(5));
-        req.setCheckOut(LocalDate.now().plusDays(3)); // inválido
+        req.setCheckOut(LocalDate.now().plusDays(3)); // invalid range
 
         Exception ex = assertThrows(
                 BadRequestException.class,
@@ -113,6 +153,11 @@ public class ReservationServiceTest {
         assertTrue(ex.getMessage().contains("Check-out must be after check-in"));
     }
 
+    /**
+     * Ensures that when a reservation is created,
+     * the service correctly passes the expected values
+     * to the repository.
+     */
     @Test
     void testCreateReservation_PersistsExpectedValues() {
         ReservationRequest req = buildRequest();
@@ -135,6 +180,10 @@ public class ReservationServiceTest {
         assertEquals(req.getCheckOut(), toPersist.getCheckOut());
     }
 
+    /**
+     * Tests validation for same-day check-in and check-out.
+     * The service must reject this case.
+     */
     @Test
     void testCreateReservation_SameDay_Invalid() {
         ReservationRequest req = new ReservationRequest();
@@ -142,13 +191,18 @@ public class ReservationServiceTest {
         req.setHotelName("Hotel Azul");
         LocalDate day = LocalDate.now().plusDays(4);
         req.setCheckIn(day);
-        req.setCheckOut(day); // same day should be invalid
+        req.setCheckOut(day); // invalid: same day
 
         Exception ex = assertThrows(BadRequestException.class, () -> service.create(req));
-        assertTrue(ex.getMessage().toLowerCase().contains("after")); // message like "Check-out must be after check-in"
+        assertTrue(ex.getMessage().toLowerCase().contains("after"));
         verify(repository, never()).save(any());
     }
 
+    /**
+     * Ensures that canceling a reservation results in:
+     *  - Status being updated to CANCELED
+     *  - save() being invoked with correct updated object
+     */
     @Test
     void testCancelReservation_SavesCanceledStatus() {
         Reservation res = new Reservation(
@@ -172,6 +226,10 @@ public class ReservationServiceTest {
         assertEquals(ReservationStatus.CANCELED, result.getStatus());
     }
 
+    /**
+     * Tests that the Reservation model behaves correctly
+     * when using setters and getters.
+     */
     @Test
     void testReservationModel() {
         Reservation r = new Reservation();
