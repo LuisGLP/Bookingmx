@@ -146,5 +146,6 @@ target/generated-sources
 target/generated-test-sources
 target/maven-status
 target/test-classes
+backend/target/
 
 # End of https://www.toptal.com/developers/gitignore/api/node
