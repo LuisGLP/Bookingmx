@@ -10,6 +10,7 @@ import java.time.LocalDate;
  * It represents the structured output returned by the API, containing
  * essential reservation details including status and dates.
  */
+
 public class ReservationResponse {
 
     /**
@@ -68,13 +69,10 @@ public class ReservationResponse {
      * This constructor is used whenever a Reservation entity
      * is converted into a response DTO.
      */
+
     public ReservationResponse(Long id, String guestName, String hotelName, LocalDate checkIn, LocalDate checkOut, ReservationStatus status) {
-        this.id = id; 
-        this.guestName = guestName; 
-        this.hotelName = hotelName;
-        this.checkIn = checkIn; 
-        this.checkOut = checkOut; 
-        this.status = status;
+        this.id = id; this.guestName = guestName; this.hotelName = hotelName;
+        this.checkIn = checkIn; this.checkOut = checkOut; this.status = status;
     }
 
     /** @return The reservation ID. */
