@@ -6,6 +6,11 @@ import {
   sampleData,
 } from "./graph.js";
 
+/**
+ * Test suite for the Graph class and utility functions.
+ * Ensures correct graph behavior, data validation, and distance filtering.
+ */
+
 describe("Graph Class", () => {
   describe("constructor", () => {
     test("should create an empty graph", () => {
@@ -60,6 +65,12 @@ describe("Graph Class", () => {
     });
   });
 });
+
+/**
+ * Validation tests for graph dataset structure and content.
+ * Checks robustness against malformed or incomplete data.
+ */
+
 
 describe("validateGraphData", () => {
   test("should validate correct sample data", () => {
@@ -157,6 +168,12 @@ describe("validateGraphData", () => {
     expect(result.ok).toBe(true);
   });
 });
+
+/**
+ * Tests for the getNearbyCities function.
+ * Ensures proper filtering, sorting, and handling of invalid input.
+ */
+
 
 describe("getNearbyCities", () => {
   let testGraph;
