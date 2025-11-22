@@ -35,6 +35,7 @@ import static org.hamcrest.Matchers.is;
  * @WebMvcTest loads only the web layer (controllers).
  * @Import registers GlobalExceptionHandler so exception mapping is tested.
  */
+
 @WebMvcTest(ReservationController.class)
 @Import(GlobalExceptionHandler.class)
 class ReservationControllerTest {
@@ -116,4 +117,83 @@ class ReservationControllerTest {
         Reservation saved = buildReservation(1L);
         when(service.create(any())).thenReturn(saved);
 
-        mock
+        mockMvc.perform(post("/api/reservations")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(buildRequestJson()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.guestName", is("Luis")));
+    }
+
+    /**
+     * Tests PUT /api/reservations/{id}
+     *
+     * Ensures updating a reservation returns correct updated data.
+     */
+    @Test
+    void testUpdateReservation() throws Exception {
+        Reservation updated = buildReservation(2L);
+        when(service.update(eq(2L), any())).thenReturn(updated);
+
+        mockMvc.perform(put("/api/reservations/2")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(buildRequestJson()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(2)));
+    }
+
+    /**
+     * Tests DELETE /api/reservations/{id}
+     *
+     * Ensures cancellation marks a reservation as CANCELED.
+     */
+    @Test
+    void testCancelReservation() throws Exception {
+        Reservation canceled = buildReservation(3L);
+        canceled.setStatus(ReservationStatus.CANCELED);
+
+        when(service.cancel(3L)).thenReturn(canceled);
+
+        mockMvc.perform(delete("/api/reservations/3"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status", is("CANCELED")));
+    }
+
+    /**
+     * Tests NotFoundException handling via GlobalExceptionHandler.
+     */
+    @Test
+    void testHandleNotFound() throws Exception {
+        when(service.cancel(99L)).thenThrow(new NotFoundException("Reservation not found"));
+
+        mockMvc.perform(delete("/api/reservations/99"))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Reservation not found"));
+    }
+
+    /**
+     * Tests BadRequestException handling via GlobalExceptionHandler.
+     */
+    @Test
+    void testHandleBadRequest() throws Exception {
+        when(service.create(any())).thenThrow(new BadRequestException("Invalid data"));
+
+        mockMvc.perform(post("/api/reservations")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(buildRequestJson()))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Invalid data"));
+    }
+
+    /**
+     * Tests generic exception handling (non-specific errors).
+     */
+    @Test
+    void testHandleOtherException() throws Exception {
+        when(service.list()).thenThrow(new RuntimeException("Boom"));
+
+        mockMvc.perform(get("/api/reservations"))
+                .andExpect(status().isInternalServerError())
+                .andExpect(content().string("Internal error"));
+    }
+}
