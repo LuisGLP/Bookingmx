@@ -21,6 +21,7 @@ import java.util.concurrent.atomic.AtomicLong;
  *
  * IDs are automatically generated using an AtomicLong sequence.
  */
+
 @Repository
 public class ReservationRepository {
 
@@ -40,6 +41,7 @@ public class ReservationRepository {
      */
     private final AtomicLong seq = new AtomicLong(1L);
 
+
     /**
      * Retrieves all reservations stored in memory.
      *
@@ -49,6 +51,7 @@ public class ReservationRepository {
     public List<Reservation> findAll() {
         return new ArrayList<>(store.values());
     }
+
 
     /**
      * Searches for a reservation by its ID.
@@ -75,6 +78,7 @@ public class ReservationRepository {
         store.put(r.getId(), r);
         return r;
     }
+
 
     /**
      * Deletes a reservation from the repository by its ID.
