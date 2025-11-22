@@ -50,7 +50,7 @@ public class GlobalExceptionHandler {
      *         - HTTP status 400 BAD REQUEST
      *         - Response body containing the exception message
      */
-    
+
     @ExceptionHandler({ BadRequestException.class, MethodArgumentNotValidException.class, HttpMessageNotReadableException.class })
     public ResponseEntity<String> handleBadRequest(Exception ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
@@ -65,7 +65,7 @@ public class GlobalExceptionHandler {
      *         - HTTP status 500 INTERNAL SERVER ERROR
      *         - Generic response body: "Internal error"
      */
-    
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleOther(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal error");
