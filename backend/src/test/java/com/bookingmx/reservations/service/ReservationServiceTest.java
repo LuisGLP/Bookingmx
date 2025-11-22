@@ -20,6 +20,7 @@ import java.util.Optional;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+
 /**
  * ReservationServiceTest
  *
@@ -143,7 +144,7 @@ public class ReservationServiceTest {
         req.setGuestName("Luis");
         req.setHotelName("Hotel Azul");
         req.setCheckIn(LocalDate.now().plusDays(5));
-        req.setCheckOut(LocalDate.now().plusDays(3)); // invalid range
+        req.setCheckOut(LocalDate.now().plusDays(3)); // inválido
 
         Exception ex = assertThrows(
                 BadRequestException.class,
@@ -191,10 +192,10 @@ public class ReservationServiceTest {
         req.setHotelName("Hotel Azul");
         LocalDate day = LocalDate.now().plusDays(4);
         req.setCheckIn(day);
-        req.setCheckOut(day); // invalid: same day
+        req.setCheckOut(day); // same day should be invalid
 
         Exception ex = assertThrows(BadRequestException.class, () -> service.create(req));
-        assertTrue(ex.getMessage().toLowerCase().contains("after"));
+        assertTrue(ex.getMessage().toLowerCase().contains("after")); // message like "Check-out must be after check-in"
         verify(repository, never()).save(any());
     }
 
