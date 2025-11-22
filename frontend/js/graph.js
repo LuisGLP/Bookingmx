@@ -13,10 +13,11 @@
 //   - A small sample dataset used for demos or tests
 // ---------------------------------------------------------------------------
 
+
 export class Graph {
     constructor() {
         // Adjacency list mapping each city to an array of { to, distance }
-        this.adj = new Map();
+        this.adj = new Map(); // city -> Array<{to, distance}>
     }
 
     /**
@@ -40,7 +41,7 @@ export class Graph {
         if (!this.adj.has(from) || !this.adj.has(to)) throw new Error("Unknown city");
         if (!Number.isFinite(distanceKm) || distanceKm < 0) throw new Error("Invalid distance");
         this.adj.get(from).push({ to, distance: distanceKm });
-        this.adj.get(to).push({ to: from, distance: distanceKm }); // undirected edge
+        this.adj.get(to).push({ to: from, distance: distanceKm }); // undirected
     }
 
     /**
@@ -64,25 +65,15 @@ export class Graph {
  * @returns {Object} { ok: boolean, reason?: string }
  */
 export function validateGraphData({ cities, edges }) {
-    if (!Array.isArray(cities) || !Array.isArray(edges))
-        return { ok: false, reason: "cities/edges must be arrays" };
-
+    if (!Array.isArray(cities) || !Array.isArray(edges)) return { ok: false, reason: "cities/edges must be arrays" };
     const citySet = new Set(cities);
-    if (citySet.size !== cities.length)
-        return { ok: false, reason: "duplicate cities" };
-
-    for (const c of cities)
-        if (typeof c !== "string" || !c.trim())
-            return { ok: false, reason: "invalid city entry" };
-
+    if (citySet.size !== cities.length) return { ok: false, reason: "duplicate cities" };
+    for (const c of cities) if (typeof c !== "string" || !c.trim()) return { ok: false, reason: "invalid city entry" };
     for (const e of edges) {
         const { from, to, distance } = e ?? {};
-        if (!citySet.has(from) || !citySet.has(to))
-            return { ok: false, reason: "edge references unknown city" };
-        if (!Number.isFinite(distance) || distance < 0)
-            return { ok: false, reason: "invalid distance" };
+        if (!citySet.has(from) || !citySet.has(to)) return { ok: false, reason: "edge references unknown city" };
+        if (!Number.isFinite(distance) || distance < 0) return { ok: false, reason: "invalid distance" };
     }
-
     return { ok: true };
 }
 
@@ -114,14 +105,13 @@ export function buildGraph(cities, edges) {
 export function getNearbyCities(graph, destination, maxDistanceKm = 250) {
     if (!(graph instanceof Graph)) throw new Error("graph must be Graph");
     if (typeof destination !== "string" || !graph.adj.has(destination)) return [];
-
     const neighbors = graph.neighbors(destination);
-
     return neighbors
         .filter(n => n.distance <= maxDistanceKm)
-        .sort((a, b) => a.distance - b.distance)
+        .sort((a,b) => a.distance - b.distance)
         .map(n => ({ city: n.to, distance: n.distance }));
 }
+
 
 // ---------------------------------------------------------------------------
 // Sample dataset used for quick demos, tests, or the application’s initial state.
@@ -129,8 +119,7 @@ export function getNearbyCities(graph, destination, maxDistanceKm = 250) {
 // ---------------------------------------------------------------------------
 export const sampleData = {
     cities: [
-        "Guadalajara", "Tlaquepaque", "Zapopan", "Tepatitlán",
-        "Lagos de Moreno", "Tala", "Tequila"
+        "Guadalajara", "Tlaquepaque", "Zapopan", "Tepatitlán", "Lagos de Moreno", "Tala", "Tequila"
     ],
     edges: [
         { from: "Guadalajara", to: "Zapopan", distance: 12 },
