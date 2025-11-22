@@ -15,17 +15,18 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * Running the main method starts the embedded server (e.g., Tomcat)
  * and initializes the entire application context.
  */
-@SpringBootApplication
-public class BookingMxApplication {
 
-    /**
-     * main
-     *
-     * Application entry point. Boots the Spring framework and starts
-     * the BookingMX Reservations API.
-     *
-     * @param args Optional command-line arguments.
-     */
+@SpringBootApplication
+
+/**
+ * main
+ *
+ * Application entry point. Boots the Spring framework and starts
+ * the BookingMX Reservations API.
+ *
+ * @param args Optional command-line arguments.
+ */
+public class BookingMxApplication {
     public static void main(String[] args) {
         SpringApplication.run(BookingMxApplication.class, args);
     }
