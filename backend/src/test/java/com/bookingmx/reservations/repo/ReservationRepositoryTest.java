@@ -70,6 +70,7 @@ class ReservationRepositoryTest {
      * Tests that save() assigns an ID to a new reservation
      * and correctly stores it.
      */
+
     @Test
     void testSaveCreatesIdAndStoresReservation() {
         Reservation r = new Reservation(null, "Luis", "Hotel A",
@@ -125,7 +126,6 @@ class ReservationRepositoryTest {
     // =====================================================
     //  TESTS FOR SERVICE LAYER WITH MOCKED REPOSITORY
     // =====================================================
-
     /**
      * Tests that list() returns the full list of reservations
      * returned by the mocked repository.
@@ -157,7 +157,7 @@ class ReservationRepositoryTest {
                 LocalDate.now().plusDays(3), LocalDate.now().plusDays(4));
 
         when(mockRepo.findById(1L)).thenReturn(Optional.of(existing));
-        when(mockRepo.save(any())).thenAnswer(inv -> inv.getArgument(0)); // return input object
+        when(mockRepo.save(any())).thenAnswer(inv -> inv.getArgument(0)); // lambda
 
         ReservationRequest req = new ReservationRequest("New", "New Hotel",
                 LocalDate.now().plusDays(5), LocalDate.now().plusDays(6));
@@ -196,7 +196,7 @@ class ReservationRepositoryTest {
 
         // Invalid date scenario: check-out equals check-in
         ReservationRequest req = new ReservationRequest("Luis", "Hotel",
-                LocalDate.now().plusDays(5), LocalDate.now().plusDays(5));
+                LocalDate.now().plusDays(5), LocalDate.now().plusDays(5)); // fechas inválidas
 
         assertThrows(BadRequestException.class,
                 () -> service.update(1L, req));
