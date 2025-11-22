@@ -10,7 +10,7 @@
 //
 // This file is intentionally small and framework-agnostic so it can be easily
 // mocked and tested in tools like Jest.
-// ---------------------------------------------------------------------------
+// ----------
 
 const BASE_URL = "http://localhost:8080/api/reservations";
 
