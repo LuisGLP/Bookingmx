@@ -14,15 +14,18 @@ import java.util.List;
 
 /**
  * ReservationService
+ *
  * This service layer contains the business logic for handling reservations.
  * It validates data, enforces rules, interacts with the repository, and
  * ensures consistency before saving or updating reservation entities.
  */
+
 @Service
 public class ReservationService {
 
     /**
      * repo
+     *
      * Repository used for performing CRUD operations on reservations.
      */
     private final ReservationRepository repo;
@@ -47,6 +50,7 @@ public class ReservationService {
 
     /**
      * Creates a new reservation.
+     *
      * Steps performed:
      * - Validates check-in and check-out dates.
      * - Creates a new Reservation entity using the request data.
@@ -57,18 +61,13 @@ public class ReservationService {
      */
     public Reservation create(ReservationRequest req) {
         validateDates(req.getCheckIn(), req.getCheckOut());
-        Reservation r = new Reservation(
-                null,
-                req.getGuestName(),
-                req.getHotelName(),
-                req.getCheckIn(),
-                req.getCheckOut()
-        );
+        Reservation r = new Reservation(null, req.getGuestName(), req.getHotelName(), req.getCheckIn(), req.getCheckOut());
         return repo.save(r);
     }
 
     /**
      * Updates an existing reservation.
+     *
      * Steps performed:
      * - Finds the reservation by ID or throws NotFoundException.
      * - Ensures the reservation is active (cannot update canceled reservations).
@@ -81,19 +80,13 @@ public class ReservationService {
      * @return The updated Reservation entity.
      */
     public Reservation update(Long id, ReservationRequest req) {
-        Reservation existing = repo.findById(id)
-                .orElseThrow(() -> new NotFoundException("Reservation not found"));
-
-        if (!existing.isActive())
-            throw new BadRequestException("Cannot update a canceled reservation");
-
+        Reservation existing = repo.findById(id).orElseThrow(() -> new NotFoundException("Reservation not found"));
+        if (!existing.isActive()) throw new BadRequestException("Cannot update a canceled reservation");
         validateDates(req.getCheckIn(), req.getCheckOut());
-
         existing.setGuestName(req.getGuestName());
         existing.setHotelName(req.getHotelName());
         existing.setCheckIn(req.getCheckIn());
         existing.setCheckOut(req.getCheckOut());
-
         return repo.save(existing);
     }
 
@@ -104,12 +97,24 @@ public class ReservationService {
      * @return The canceled Reservation object after saving the change.
      */
     public Reservation cancel(Long id) {
-        Reservation existing = repo.findById(id)
-                .orElseThrow(() -> new NotFoundException("Reservation not found"));
-
+        Reservation existing = repo.findById(id).orElseThrow(() -> new NotFoundException("Reservation not found"));
         existing.setStatus(ReservationStatus.CANCELED);
         return repo.save(existing);
     }
+
+    /**
+     * Validates check-in and check-out dates.
+     *
+     * Rules:
+     * - Dates cannot be null.
+     * - Check-out must be strictly after check-in.
+     * - Both dates must be in the future.
+     *
+     * @param in  The check-in date.
+     * @param out The check-out date.
+     *
+     * @throws BadRequestException if any rule is violated.
+     */
     private void validateDates(LocalDate in, LocalDate out) {
         if (in == null || out == null) throw new BadRequestException("Dates cannot be null");
         if (!out.isAfter(in)) throw new BadRequestException("Check-out must be after check-in");
