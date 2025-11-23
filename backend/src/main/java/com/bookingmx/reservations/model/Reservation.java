@@ -10,6 +10,7 @@ import java.util.Objects;
  * This class stores essential information such as guest name,
  * hotel name, reservation dates, and the current status.
  */
+
 public class Reservation {
 
     /**
@@ -54,6 +55,7 @@ public class Reservation {
      * Current reservation status (e.g., ACTIVE or CANCELED).
      * Defaults to ACTIVE upon creation.
      */
+
     private ReservationStatus status = ReservationStatus.ACTIVE;
 
     /**
@@ -61,6 +63,7 @@ public class Reservation {
      *
      * Used by frameworks or libraries that require a no-argument constructor.
      */
+
     public Reservation() {}
 
     /**
@@ -74,6 +77,7 @@ public class Reservation {
      *
      * Status is automatically set to ACTIVE when using this constructor.
      */
+
     public Reservation(Long id, String guestName, String hotelName, LocalDate checkIn, LocalDate checkOut) {
         this.id = id;
         this.guestName = guestName;
@@ -83,27 +87,69 @@ public class Reservation {
         this.status = ReservationStatus.ACTIVE;
     }
 
+    /** @return The reservation ID. */
     public Long getId() { return id; }
+
+    /** Sets the reservation ID. */
     public void setId(Long id) { this.id = id; }
+
+    /** @return The guest's name. */
     public String getGuestName() { return guestName; }
+
+    /** Sets the guest's name. */
     public void setGuestName(String guestName) { this.guestName = guestName; }
+
+    /** @return The hotel's name. */
     public String getHotelName() { return hotelName; }
+
+    /** Sets the hotel's name. */
     public void setHotelName(String hotelName) { this.hotelName = hotelName; }
+
+    /** @return The check-in date. */
     public LocalDate getCheckIn() { return checkIn; }
+
+    /** Sets the check-in date. */
     public void setCheckIn(LocalDate checkIn) { this.checkIn = checkIn; }
+
+    /** @return The check-out date. */
     public LocalDate getCheckOut() { return checkOut; }
+
+    /** Sets the check-out date. */
     public void setCheckOut(LocalDate checkOut) { this.checkOut = checkOut; }
+
+    /** @return The current reservation status. */
     public ReservationStatus getStatus() { return status; }
+
+    /** Updates the reservation status. */
     public void setStatus(ReservationStatus status) { this.status = status; }
 
+    /**
+     * Checks if the reservation is currently active.
+     *
+     * @return true if status is ACTIVE, false otherwise.
+     */
     public boolean isActive() { return this.status == ReservationStatus.ACTIVE; }
 
+
+    /**
+     * equals method
+     *
+     * Two reservations are considered equal if they share the same ID.
+     * This allows proper comparison when using data structures such as sets.
+     */
     @Override public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Reservation)) return false;
         Reservation that = (Reservation) o;
         return Objects.equals(id, that.id);
     }
+
+    /**
+     * hashCode method
+     *
+     * Generates a hash based solely on the reservation ID.
+     * Ensures consistency with the equals() implementation.
+     */
 
     @Override public int hashCode() { return Objects.hash(id); }
 }

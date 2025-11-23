@@ -1,22 +1,25 @@
 package com.bookingmx.reservations.repo;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.mockito.ArgumentMatchers.any;
+import org.mockito.Mockito;
+import static org.mockito.Mockito.when;
+
 import com.bookingmx.reservations.dto.ReservationRequest;
 import com.bookingmx.reservations.exception.BadRequestException;
 import com.bookingmx.reservations.exception.NotFoundException;
 import com.bookingmx.reservations.model.Reservation;
 import com.bookingmx.reservations.service.ReservationService;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 /**
  * ReservationRepositoryTest
@@ -70,6 +73,7 @@ class ReservationRepositoryTest {
      * Tests that save() assigns an ID to a new reservation
      * and correctly stores it.
      */
+
     @Test
     void testSaveCreatesIdAndStoresReservation() {
         Reservation r = new Reservation(null, "Luis", "Hotel A",
@@ -125,7 +129,6 @@ class ReservationRepositoryTest {
     // =====================================================
     //  TESTS FOR SERVICE LAYER WITH MOCKED REPOSITORY
     // =====================================================
-
     /**
      * Tests that list() returns the full list of reservations
      * returned by the mocked repository.

@@ -1,3 +1,14 @@
+// -----------------------------------------------------------------------------
+// Frontend controller that wires together the Graph module and the Reservations
+// API client. This file is responsible only for UI interaction and DOM updates.
+//
+// Responsibilities:
+//   - Build and validate the sample graph dataset
+//   - Handle user form submission to compute nearby cities
+//   - Load, create, and cancel reservations via REST API
+//   - Update UI lists dynamically
+// -----------------------------------------------------------------------------
+
 import {
   sampleData,
   validateGraphData,
@@ -29,15 +40,12 @@ const graph = validation.ok
 form.addEventListener("submit", (e) => {
   e.preventDefault();
   if (!graph) return;
-
   const dest = destinationEl.value.trim();
   const maxD = Number(maxDistanceEl.value);
 
   // Query graph for nearby cities
   const results = getNearbyCities(graph, dest, maxD);
-
   nearbyList.innerHTML = "";
-
   if (results.length === 0) {
     nearbyList.innerHTML = `<li>No nearby cities found. Check destination or adjust distance.</li>`;
     return;
@@ -70,15 +78,10 @@ async function refreshReservations() {
     listEl.innerHTML = "";
     for (const r of items) {
       const li = document.createElement("li");
-      // ⬇️ si el estatus es "cancelled", no se muestra el botón
-      const cancelBtn =
-        r.status.toLowerCase() === "canceled"
-          ? ""
-          : `<button data-id="${r.id}" class="cancel">Cancel</button>`;
       li.innerHTML = `
         <strong>#${r.id}</strong> ${r.guestName} @ ${r.hotelName}
         (${r.checkIn} → ${r.checkOut}) [${r.status}]
-        ${cancelBtn}
+        <button data-id=\"${r.id}\" class=\"cancel\">Cancel</button>
       `;
       listEl.appendChild(li);
     }
@@ -119,9 +122,7 @@ resForm.addEventListener("submit", async (e) => {
 listEl.addEventListener("click", async (e) => {
   const btn = e.target.closest(".cancel");
   if (!btn) return;
-
   const id = btn.getAttribute("data-id");
-
   try {
     await cancelReservation(id);
     await refreshReservations();

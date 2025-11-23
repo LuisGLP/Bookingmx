@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * Spring automatically returns an HTTP 400 BAD REQUEST response because
  * of the @ResponseStatus annotation.
  */
+
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class BadRequestException extends RuntimeException {
 
@@ -22,7 +23,6 @@ public class BadRequestException extends RuntimeException {
      * This message is included in the HTTP response body and helps
      * the client understand what went wrong.
      */
-    public BadRequestException(String m) {
-        super(m);
-    }
+
+    public BadRequestException(String m) { super(m); }
 }

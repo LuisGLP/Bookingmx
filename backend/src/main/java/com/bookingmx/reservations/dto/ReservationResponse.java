@@ -1,7 +1,8 @@
 package com.bookingmx.reservations.dto;
 
-import com.bookingmx.reservations.model.ReservationStatus;
 import java.time.LocalDate;
+
+import com.bookingmx.reservations.model.ReservationStatus;
 
 /**
  * ReservationResponse
@@ -10,6 +11,7 @@ import java.time.LocalDate;
  * It represents the structured output returned by the API, containing
  * essential reservation details including status and dates.
  */
+
 public class ReservationResponse {
 
     /**
@@ -68,6 +70,7 @@ public class ReservationResponse {
      * This constructor is used whenever a Reservation entity
      * is converted into a response DTO.
      */
+
     public ReservationResponse(Long id, String guestName, String hotelName, LocalDate checkIn, LocalDate checkOut, ReservationStatus status) {
         this.id = id; 
         this.guestName = guestName; 

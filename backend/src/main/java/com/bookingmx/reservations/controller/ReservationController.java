@@ -18,6 +18,7 @@ import java.util.List;
  * It handles operations such as listing, creating, updating and canceling reservations.
  * All responses are produced in JSON format.
  */
+
 @RestController
 @CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:5173", "*"})
 @RequestMapping(value = "/api/reservations", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -30,6 +31,7 @@ public class ReservationController {
      *
      * @param service The service layer that contains business logic for reservations.
      */
+
     public ReservationController(ReservationService service) {
         this.service = service;
     }
@@ -44,6 +46,7 @@ public class ReservationController {
      * This method calls service.list() and maps each Reservation entity
      * into a ReservationResponse DTO.
      */
+
     @GetMapping(produces = "application/json")
     public List<ReservationResponse> list() {
         return service.list().stream()
@@ -62,6 +65,7 @@ public class ReservationController {
      * The request is passed to the service layer, and the result is converted
      * into a ReservationResponse DTO.
      */
+
     @PostMapping(consumes = "application/json", produces = "application/json")
     public ReservationResponse create(@Valid @RequestBody ReservationRequest req) {
         return toResponse(service.create(req));
@@ -76,6 +80,7 @@ public class ReservationController {
      * @param req The updated reservation data, validated with @Valid.
      * @return ReservationResponse with updated reservation information.
      */
+
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ReservationResponse update(@PathVariable("id") Long id, @Valid @RequestBody ReservationRequest req) {
         return toResponse(service.update(id, req));
@@ -89,6 +94,7 @@ public class ReservationController {
      * @param id The ID of the reservation to cancel.
      * @return ReservationResponse representing the canceled reservation.
      */
+
     @DeleteMapping("/{id}")
     public ReservationResponse cancel(@PathVariable("id") Long id) {
         return toResponse(service.cancel(id));
@@ -103,6 +109,7 @@ public class ReservationController {
      * This method extracts and passes individual Reservation attributes
      * into the corresponding DTO constructor.
      */
+
     private ReservationResponse toResponse(Reservation r) {
         return new ReservationResponse(
                 r.getId(), r.getGuestName(), r.getHotelName(), r.getCheckIn(), r.getCheckOut(), r.getStatus()

@@ -19,6 +19,7 @@ import java.util.Map;
  * - status: HTTP status code
  * - message: human-readable error description
  */
+
 @RestControllerAdvice
 public class ApiExceptionHandler {
 
@@ -32,6 +33,7 @@ public class ApiExceptionHandler {
      *
      * This method is triggered when the client sends invalid or incomplete input.
      */
+
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<?> badRequest(BadRequestException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorBody(ex.getMessage(), 400));
@@ -47,6 +49,7 @@ public class ApiExceptionHandler {
      *
      * This method is used when a requested resource cannot be found.
      */
+
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<?> notFound(NotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorBody(ex.getMessage(), 404));
@@ -62,6 +65,7 @@ public class ApiExceptionHandler {
      *
      * This prevents raw stack traces or sensitive information from being exposed.
      */
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> generic(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -80,6 +84,7 @@ public class ApiExceptionHandler {
      *
      * This method ensures all error responses share the same structure.
      */
+
     private Map<String, Object> errorBody(String message, int status) {
         return Map.of(
                 "timestamp", Instant.now().toString(),

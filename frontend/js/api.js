@@ -10,7 +10,7 @@
 //
 // This file is intentionally small and framework-agnostic so it can be easily
 // mocked and tested in tools like Jest.
-// ---------------------------------------------------------------------------
+// ----------
 
 const BASE_URL = "http://localhost:8080/api/reservations";
 
@@ -19,9 +19,9 @@ const BASE_URL = "http://localhost:8080/api/reservations";
  * Throws an error if the request fails.
  */
 export async function listReservations() {
-    const res = await fetch(BASE_URL);
-    if (!res.ok) throw new Error("Failed to fetch reservations");
-    return res.json();
+  const res = await fetch(BASE_URL);
+  if (!res.ok) throw new Error("Failed to fetch reservations");
+  return res.json();
 }
 
 /**
@@ -30,13 +30,13 @@ export async function listReservations() {
  * Throws a backend-generated message or a default one.
  */
 export async function createReservation(payload) {
-    const res = await fetch(BASE_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-    });
-    if (!res.ok) throw new Error((await res.json()).message || "Create failed");
-    return res.json();
+  const res = await fetch(BASE_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) throw new Error((await res.json()).message || "Create failed");
+  return res.json();
 }
 
 /**
@@ -45,13 +45,13 @@ export async function createReservation(payload) {
  * @param {Object} payload - Updated fields.
  */
 export async function updateReservation(id, payload) {
-    const res = await fetch(`${BASE_URL}/${encodeURIComponent(id)}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-    });
-    if (!res.ok) throw new Error((await res.json()).message || "Update failed");
-    return res.json();
+  const res = await fetch(`${BASE_URL}/${encodeURIComponent(id)}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) throw new Error((await res.json()).message || "Update failed");
+  return res.json();
 }
 
 /**
@@ -59,7 +59,9 @@ export async function updateReservation(id, payload) {
  * Backend returns updated reservation or confirmation payload.
  */
 export async function cancelReservation(id) {
-    const res = await fetch(`${BASE_URL}/${encodeURIComponent(id)}`, { method: "DELETE" });
-    if (!res.ok) throw new Error((await res.json()).message || "Cancel failed");
-    return res.json();
+  const res = await fetch(`${BASE_URL}/${encodeURIComponent(id)}`, {
+    method: "DELETE",
+  });
+  if (!res.ok) throw new Error((await res.json()).message || "Cancel failed");
+  return res.json();
 }

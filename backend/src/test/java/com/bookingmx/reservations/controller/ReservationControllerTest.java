@@ -24,6 +24,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.hamcrest.Matchers.is;
+
 /**
  * ReservationControllerTest
  *
@@ -34,9 +35,11 @@ import static org.hamcrest.Matchers.is;
  * @WebMvcTest loads only the web layer (controllers).
  * @Import registers GlobalExceptionHandler so exception mapping is tested.
  */
+
 @WebMvcTest(ReservationController.class)
 @Import(GlobalExceptionHandler.class)
 class ReservationControllerTest {
+
     /**
      * mockMvc
      *
@@ -44,6 +47,7 @@ class ReservationControllerTest {
      */
     @Autowired
     private MockMvc mockMvc;
+
     /**
      * service
      *
@@ -52,6 +56,7 @@ class ReservationControllerTest {
      */
     @MockBean
     private ReservationService service;
+
     /**
      * Helper method that creates a sample Reservation instance for testing.
      *
@@ -67,6 +72,7 @@ class ReservationControllerTest {
                 LocalDate.now().plusDays(5)
         );
     }
+
     /**
      * Helper method that builds a JSON string for POST/PUT request payload.
      *
@@ -85,6 +91,7 @@ class ReservationControllerTest {
                 LocalDate.now().plusDays(5)
         );
     }
+
     /**
      * Tests GET /api/reservations
      *
@@ -99,6 +106,7 @@ class ReservationControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].guestName", is("Luis")));
     }
+
     /**
      * Tests POST /api/reservations
      *
@@ -117,6 +125,11 @@ class ReservationControllerTest {
                 .andExpect(jsonPath("$.guestName", is("Luis")));
     }
 
+    /**
+     * Tests PUT /api/reservations/{id}
+     *
+     * Ensures updating a reservation returns correct updated data.
+     */
     @Test
     void testUpdateReservation() throws Exception {
         Reservation updated = buildReservation(2L);
@@ -129,6 +142,11 @@ class ReservationControllerTest {
                 .andExpect(jsonPath("$.id", is(2)));
     }
 
+    /**
+     * Tests DELETE /api/reservations/{id}
+     *
+     * Ensures cancellation marks a reservation as CANCELED.
+     */
     @Test
     void testCancelReservation() throws Exception {
         Reservation canceled = buildReservation(3L);
@@ -141,6 +159,9 @@ class ReservationControllerTest {
                 .andExpect(jsonPath("$.status", is("CANCELED")));
     }
 
+    /**
+     * Tests NotFoundException handling via GlobalExceptionHandler.
+     */
     @Test
     void testHandleNotFound() throws Exception {
         when(service.cancel(99L)).thenThrow(new NotFoundException("Reservation not found"));
@@ -150,6 +171,9 @@ class ReservationControllerTest {
                 .andExpect(content().string("Reservation not found"));
     }
 
+    /**
+     * Tests BadRequestException handling via GlobalExceptionHandler.
+     */
     @Test
     void testHandleBadRequest() throws Exception {
         when(service.create(any())).thenThrow(new BadRequestException("Invalid data"));
@@ -161,6 +185,9 @@ class ReservationControllerTest {
                 .andExpect(content().string("Invalid data"));
     }
 
+    /**
+     * Tests generic exception handling (non-specific errors).
+     */
     @Test
     void testHandleOtherException() throws Exception {
         when(service.list()).thenThrow(new RuntimeException("Boom"));
