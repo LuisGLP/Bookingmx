@@ -8,11 +8,9 @@
  *  - coverageReporters: Generates both text summary in console and LCOV reports for tools like SonarQube.
  */
 export default {
-    testEnvironment: "node",
-    collectCoverage: true,
-    // Focus coverage on the graph visualization module
-    collectCoverageFrom: ["js/**/*.js"],
-    coverageReporters: ["text", "lcov"]
-    // No transforms needed; we're using native ESM
-    transform: {},
+  testEnvironment: "node",
+  collectCoverage: true,
+  // Focus coverage on the graph visualization module
+  collectCoverageFrom: ["js/**/*.js"],
+  coverageReporters: ["text", "lcov"],
 };
